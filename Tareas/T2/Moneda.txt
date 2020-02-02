@@ -1,5 +1,4 @@
 /*
-Clase Moneda
  */
 package Contenido;
 
@@ -23,14 +22,9 @@ public class Moneda {
     }
        
     
-    //Metodos
+    //Metodos   
     
-    
-    
-    //Sets y Gets
-    public void setNombre(String nombre){
-        this.nombre = nombre;
-    }    
+    //Sets y Get
     
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;

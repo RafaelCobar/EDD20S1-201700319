@@ -1,0 +1,343 @@
+/*
+ */
+package Contenido;
+
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+public class Funciones {
+    private ArrayList<Persona> duenios;
+    private ArrayList<Moneda> monedas;
+    
+    
+    //Constructor
+    public Funciones() {
+        duenios = new ArrayList<>();
+        monedas = new ArrayList<>();
+    }
+    
+    public void LlamarFunciones(){        
+        inicializarValoresPersonas();
+        inicializarValoresMonedas();
+        MenuPrincipal();
+    }
+    
+    public void inicializarValoresPersonas(){
+        Moneda m1 = new Moneda("Quetzal", 100);
+        Moneda m2 = new Moneda("Dolar",20);
+        Moneda m3 = new Moneda("Euro",10);
+        Persona p1 = new Persona(2021,"Rafael");
+        p1.agregarMoneda(m1);
+        p1.agregarMoneda(m2);
+        p1.agregarMoneda(m3);
+        Persona p2 = new Persona(2022,"Byron");
+        p2.agregarMoneda(m1);
+        p2.agregarMoneda(m2);
+        p2.agregarMoneda(m3);
+        Persona p3 = new Persona(2023,"Vilma");
+        p3.agregarMoneda(m1);
+        p3.agregarMoneda(m2);
+        p3.agregarMoneda(m3);
+        duenios.add(p1);
+        duenios.add(p2);
+        duenios.add(p3);
+    }
+    
+    //Metodo para inicializar valores 
+    public void inicializarValoresMonedas(){
+        Moneda m1 = new Moneda("Quetzal");
+        Moneda m2 = new Moneda("Dolar");
+        Moneda m3 = new Moneda("Euro");
+        monedas.add(m1);
+        monedas.add(m2);
+        monedas.add(m3);
+    }
+    
+    //Menu principal del documento
+    public void MenuPrincipal(){
+        int opcion = 0;
+        do {      
+            try {     
+                opcion = Integer.parseInt(JOptionPane.showInputDialog(null,
+                        "1. Ingresar nuevo Dueño\n"+
+                        "2. Transferir Monedas a dueños\n"+
+                        "3. Depositar Monedas\n"+
+                        "4. Crear Moneda\n"+
+                        "5. Mostrar Monedas Creadas\n"+
+                        "6. Mostrar Monedas de los Dueños\n"+
+                        "7. Salir", "Menu de Opciones", 3));              
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error, ingrese una opcion entera del menu");      
+            }
+            OpcionesDeMenu(opcion);
+        } while (opcion !=7);
+    }
+    
+    
+    //Metodo para eleccion de opciones 
+    public void OpcionesDeMenu(int opcion){
+        switch(opcion){
+            case 1:     
+                crearNuevoDuenio();
+                break;
+            case 2:
+                opcionTransferenciaDuenios();
+                break;
+            case 3:
+                opcionDepositarMoneda();
+                break;
+            case 4:
+                crearNuevaMoneda();
+                break;                
+            case 5:
+                mostrarMonedasCreadas();
+                break;
+            case 6:
+                MostrarContenidoDuenio();
+                break;
+            case 7:
+                break;
+        }
+    }
+    
+    //Opcion 1 del case
+    public void crearNuevoDuenio(){   
+        String nombre = JOptionPane.showInputDialog(null,"Ingrese el nombre del dueño", "Crear Dueño", 3);  
+        int cantidad =  duenios.size()+1;
+        Persona p1 = new Persona(2020 + cantidad,nombre);
+        duenios.add(p1);
+    }    
+    
+    //Opcion 2 del case   
+    public void opcionTransferenciaDuenios(){
+        int idEmisor = obtenerDueniosEmisores();
+        int idReceptor = obtenerDueniosReceptores(idEmisor);    
+        int idMoneda =obtenerTiposDeMonedas(idEmisor);
+        int cantidadMoneda = ingresarCantidadMonedas();
+        transferenciaDeMonedas(idEmisor, idReceptor, idMoneda, cantidadMoneda);
+    }   
+    
+    public int obtenerDueniosEmisores(){
+        int id = 0;
+        String contenido = " ID         Nombre\n";
+        for(Persona p: duenios){
+            contenido += p.getId()+" - "+p.getNombre()+" \n";
+        }        
+        do {      
+            try {     
+                id = Integer.parseInt(JOptionPane.showInputDialog(null,contenido,"Escoja el Dueño Emisor", 3));              
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error, ingrese una opcion entera del menu");      
+            }
+        } while (id < 2021 || id > (2020 + duenios.size()));
+        return id;
+    }
+    
+    public int obtenerDueniosReceptores(int idEmisor){
+        int id = 0;
+        String contenido = " ID         Nombre\n";
+        for(Persona p: duenios){
+            
+            if(p.getId() != idEmisor){
+                contenido += p.getId()+" - "+p.getNombre()+" \n";
+            }
+        }    
+        
+        do {      
+            try {     
+                id = Integer.parseInt(JOptionPane.showInputDialog(null,contenido,"Escoja el Dueño Receptor", 3));              
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error, ingrese una opcion entera del menu");      
+            }
+        } while (id < 2021 || id > 2020 + duenios.size());
+        return id;
+    }
+    
+    // ObtenerTiposMonedas = sirve para obtener las monedas que tiene el emisor
+    public int obtenerTiposDeMonedas(int idEmisor){
+        int op = 0;
+        String nombreMoneda = "";
+        int i=1;
+        String contenido = "Opcion Nombre\n";
+        
+        for(Persona p: duenios){      
+            if(idEmisor == p.getId()){
+                for(Moneda m: p.getMonedas()){
+                    contenido += "      "+(i)+".     "+m.getNombre()+"     Cantidad = "+m.getCantidad()+"\n";
+                    i++;
+                }          
+                break;
+            }
+        }    
+        
+        do {      
+            try {     
+                op = Integer.parseInt(JOptionPane.showInputDialog(null,contenido,"Escoja la moneda", 3));              
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error, ingrese una opcion entera del menu");      
+            }
+        } while (op < 1 || op > i);
+        return op;
+    }
+    
+    // Ingresar el monto de monedas para traspaso
+    public int ingresarCantidadMonedas(){
+        int cantidad = 0;
+        do {         
+            try {
+                cantidad = Integer.parseInt(JOptionPane.showInputDialog(null,"Ingrese la cantidad", "Cantidad de moneda", 3));  
+            } catch (Exception e) {            
+                JOptionPane.showMessageDialog(null, "Error, ingrese una cantidad entera");  
+            }
+        } while (cantidad < 0);
+        
+        return cantidad;
+    }
+    
+    // Transfiere la monedas del emisor al receptor
+    public void transferenciaDeMonedas(int idEmisor, int idReceptor, int idMoneda, int cantidadMoneda){
+        int i = 1;
+        String nombreMoneda = "";
+        int cantidadMonedasUsuario = 0;
+        int total = 0;
+        
+        
+        for(Persona p: duenios){      
+            if(idEmisor == p.getId()){
+                for(Moneda m: p.getMonedas()){
+                    if(idMoneda == i){
+                        nombreMoneda = m.getNombre();
+                        cantidadMonedasUsuario = m.getCantidad();                        
+                        if(cantidadMoneda <= cantidadMonedasUsuario){
+                            total = cantidadMonedasUsuario - cantidadMoneda;
+                            m.setCantidad(total);
+                            depositoMonedaADuenio(idReceptor, cantidadMoneda, nombreMoneda);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "El Deposito no se pudo realizar, Debido "
+                                    + "que la cantidad ingresada es mayor a la cantidad registrada");
+                        }                       
+                        break;
+                    }
+                    i++;
+                }          
+            }
+        }   
+        
+    }
+    
+    // Transfiere la moneda al dueño receptor
+    public void depositoMonedaADuenio(int idReceptor, int cantidadMoneda, String nombreMoneda){
+        int total = 0;
+        for(Persona p: duenios){      
+            if(idReceptor == p.getId()){
+                for(Moneda m: p.getMonedas()){
+                    if(nombreMoneda.equals(nombreMoneda)){
+                        total = m.getCantidad() + cantidadMoneda;
+                        m.setCantidad(total);
+                        return;
+                    }
+                }          
+                Moneda m1 = new Moneda(nombreMoneda, cantidadMoneda);
+                p.getMonedas().add(m1);
+                return;
+            }
+        }   
+    }
+    
+    
+    // opcion 3 del case
+    public void opcionDepositarMoneda(){
+        String nombreMoneda = escogerMoneda();
+        int cantidadMoneda = ingresarCantidadMonedas();
+        int idReceptor = obtenerDueniosEmisores(); 
+        depositoMonedaADuenio(idReceptor, cantidadMoneda, nombreMoneda);        
+    }
+    
+    //Escoger el tipo de moneda que tiene el dueño emisor.    
+    public String escogerMoneda(){
+        int op = 0;
+        String nombreMoneda = "";
+        int i=1;
+        String contenido = "Opcion Nombre\n";
+        
+        
+        for(Moneda p: monedas){
+            contenido += ""+(i)+". "+p.getNombre()+" \n";
+            i++;
+        }    
+        
+        do {      
+            try {     
+                op = Integer.parseInt(JOptionPane.showInputDialog(null,contenido,"Escoja la moneda", 3));              
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error, ingrese una opcion entera del menu");      
+            }
+        } while (op < 1 || op > i);
+        
+        i = 1;
+        for(Moneda p: monedas){
+            if(op == i){
+                nombreMoneda = p.getNombre();
+                break;
+            }
+            i++;
+        }    
+        
+        return nombreMoneda;
+    }   
+    
+    
+    //Opcion 4, crea una nueva moneda
+    public void crearNuevaMoneda(){   
+        boolean verificar = false;
+        String nombre = JOptionPane.showInputDialog(null,"Ingrese el nombre de la moneda", "Crear moneda", 3); 
+        for(Moneda m: monedas){
+            if(nombre.equalsIgnoreCase(m.getNombre())){
+                verificar = true;
+                break;
+            }
+        }
+        if(verificar){
+           JOptionPane.showMessageDialog(null, "La moneda que usted intenta registrar ya ha sido registrada");
+        } else {
+            Moneda m1 = new Moneda(nombre);
+            monedas.add(m1);            
+        }
+    }    
+    
+    //Opcion 5, este metodo muestra todas las monedas creadas en el sistema
+    public void mostrarMonedasCreadas(){
+        int i=1;
+        String contenido = "";
+        for(Moneda p: monedas){
+            contenido += ""+(i)+". "+p.getNombre()+" \n";
+            i++;
+        }
+        JOptionPane.showMessageDialog(null, contenido);
+    }
+    
+    //Opcion 6, muestra las monedas que contiene el dueño seleccionado
+    public void MostrarContenidoDuenio(){
+        int idDuenio = obtenerDueniosEmisores();
+        String contenido = "";
+        for(Persona p: duenios){
+            
+            if(p.getId() == idDuenio){
+                contenido += p.getId()+" - "+p.getNombre()+"\n";
+                contenido += "---- Monedas ---\n";
+                for(Moneda m: p.getMonedas()){
+                    contenido += "Nombre = "+m.getNombre()+", Cantidad = "+m.getCantidad()+"\n";
+                }
+                break;
+            }
+        }
+        JOptionPane.showMessageDialog(null, contenido);
+    }
+    
+    
+}

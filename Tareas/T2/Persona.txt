@@ -1,0 +1,62 @@
+/*
+
+ */
+package Contenido;
+
+import java.util.ArrayList;
+
+public class Persona {
+    //atributos
+    private int id;
+    private String nombre;
+    private ArrayList<Moneda> monedas;
+    
+    
+    //Constructor
+
+    public Persona(){
+        
+    }
+    
+    public Persona(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+        monedas = new ArrayList<>();
+    }
+
+    //Metodos
+    //Sets y Gets
+
+    public void setId(int id) {
+        this.id = id;
+    }    
+    
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setMonedas(ArrayList<Moneda> monedas) {
+        this.monedas = monedas;
+    }
+
+    public int getId() {
+        return id;
+    }   
+        
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public ArrayList<Moneda> getMonedas() {
+        return monedas;
+    }
+    
+    
+    
+    public void agregarMoneda(Moneda moneda){
+        monedas.add(moneda);
+    }
+    
+    
+}
