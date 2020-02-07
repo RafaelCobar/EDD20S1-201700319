@@ -41,7 +41,7 @@ void menu(){
 			case 1:
 				cout<<"\nIngresa el No. de Carne: "; cin>>carne;
 				cout<<"Ingrese su Nombre: "; 
-				cin>>nombre;
+				getline(cin,nombre);
 				lista.insertar(carne, nombre);
 				cout<<"Informacion Ingresada CORRECTAMENTE";
 				
