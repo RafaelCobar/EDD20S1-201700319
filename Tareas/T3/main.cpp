@@ -5,7 +5,6 @@
 #include <iostream>
 #include <conio.h>
 #include <stdlib.h>
-#include <string>
 
 using namespace std;
 
@@ -39,9 +38,11 @@ void menu(){
 		
 		switch(opcion){
 			case 1:
-				cout<<"\nIngresa el No. de Carne: "; cin>>carne;
+				cout<<"\nIngresa el No. de Carne: "; 
+				cin>>carne;
+				fflush(stdin);
 				cout<<"Ingrese su Nombre: "; 
-				getline(cin,nombre);
+				getline(cin, nombre);
 				lista.insertar(carne, nombre);
 				cout<<"Informacion Ingresada CORRECTAMENTE";
 				
